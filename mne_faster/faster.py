@@ -386,7 +386,7 @@ def find_bad_components(
     ----------
     ica : Instance of ICA
         The ICA operator, already fitted to the supplied Epochs object.
-    epochs : Instance of Epochs
+    epochs : Instance of Epochs or Raw
         The untransformed epochs to analyze.
     thres : float
         The threshold value, in standard deviations, to apply. A component crossing this
@@ -420,7 +420,8 @@ def find_bad_components(
     ICA.find_bads_eog
 
     """
-    source_data = ica.get_sources(epochs).get_data(copy=False).transpose(1, 0, 2)
+    if isinstance(epochs, mne.Epochs):
+        source_data = ica.get_sources(epochs).get_data(copy=False).transpose(1, 0, 2)
     source_data = source_data.reshape(source_data.shape[0], -1)
 
     if prange is None:
