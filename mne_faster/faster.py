@@ -420,10 +420,12 @@ def find_bad_components(
     ICA.find_bads_eog
 
     """
-    if isinstance(epochs, mne.Epochs):
-        source_data = ica.get_sources(epochs).get_data(copy=False).transpose(1, 0, 2)
-    source_data = source_data.reshape(source_data.shape[0], -1)
+    source_data = ica.get_sources(epochs).get_data()
 
+    if isinstance(epochs, mne.Epochs):
+        source_data = source_data.transpose(1, 0, 2)
+    source_data = source_data.reshape(source_data.shape[0], -1)
+    
     if prange is None:
         prange = (ica.info["highpass"], ica.info["lowpass"])
     if len(prange) != 2:
